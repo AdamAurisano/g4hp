@@ -8,6 +8,7 @@
 #include "HPDetectorConstruction.hh"
 
 #include "G4PhysListFactory.hh"
+#include "G4HadronicParameters.hh"
 
 #include "HPPrimaryGeneratorAction.hh"
 
@@ -37,6 +38,9 @@ int main(int argc,char** argv) {
   G4PhysListFactory factory;
   G4VModularPhysicsList *phys = 0;
   if(factory.IsReferencePhysList(config.getphysicsList())){
+    if (config.getphysicsList() == "FTFP_BERT") {
+      G4HadronicParameters::Instance()->SetBertiniAs11_2(true);
+    }
     phys = factory.GetReferencePhysList(config.getphysicsList());
   }
   else {
