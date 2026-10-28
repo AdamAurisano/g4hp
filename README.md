@@ -20,14 +20,32 @@ Some example G4HP ntuples for p+C at 31, 60, and 120 GeV are publicly available 
 * **CERNBox G4HP p+C Ntuples**: https://cernbox.cern.ch/s/bHhuQFJv9SN4S37
 
 ## Building and Running the Code
-To build the code, execute the following commands in your terminal:
+g4hp builds in the conda environment initialized using janus-flux/env/environment.yml of the janus-flux repository.
+
+From janus-flux root, create and activate the environment:
 ```text
-source setup_g4hp_cvmfs.sh
-cmake .
-make all
+conda env create -f env/environment.yml
+conda activate janus-flux
 ```
-Running an example:
-Once compiled, you can run an example simulation using:
+From g4hp/:
 ```text
-./g4hp -t C -p proton -e 120 -l FTFP_BERT -n 10000
+cmake -S . -B build
+cmake --build build -j4
 ```
+(Legacy build on CVMFS: source setup_g4hp_cvmfs.sh)
+
+### Running an example
+Once compiled, you can run an example simulation (from g4hp/)
+```text
+./build/g4hp -t C -p proton -e 119.065 -l FTFP_BERT -n 10000 -y
+```
+Note: -e is the kinetic energy; setting it to 119.065 gives p = 120 GeV/c. -y skips the confirmation prompt.
+
+### Output
+The file created is written to g4hp_root_files/ created in the directory you run the command from (here g4hp/g4hp_root_files/).
+To write it elsewhere, use `-k <dir>` or set the environment variable G4HP_ROOTDIR.
+```text
+<particle>_<energy>_<target>_<physicslist>_<run>.root
+```
+(The example file would be: proton_119.065_C_FTFP_BERT_1.root)
+

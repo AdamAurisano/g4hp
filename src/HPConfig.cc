@@ -1,9 +1,10 @@
 #include "HPConfig.hh"
 #include "HPTargets.hh"
+#include "G4HadronicParameters.hh"
 #include <iostream>
 
 HPConfig :: HPConfig (int argc, char **argv) : 
-  physicsList("QGSP_BERT"), nEvents("100000"), runNumber("1"), isConfirmed(false)
+  physicsList("FTFP_BERT"), nEvents("100000"), runNumber("1"), isConfirmed(false)
 {
   if (argc == 1) usage();
   
@@ -70,7 +71,7 @@ void HPConfig :: usage () const
             << "(include/HPTargets.hh)\n\n";
   std::cout << "\t -p [beam particle], e.g. proton\n";
   std::cout << "\t -e [beam energy], in GeV\n";
-  std::cout << "\t -l [physics list], optional (default = QGSP_BERT) \n";
+  std::cout << "\t -l [physics list], optional (default = FTFP_BERT) \n";
   std::cout << "\n\t -n [number of events], optional (default = 100k)\n";
   std::cout << "\n\t -x [run number], optional (default = 1)\n";
   std::cout << "\n\t -f [output ROOT file name], optional "
@@ -110,6 +111,8 @@ TTree* HPConfig :: createTree () const
   tree->Branch ("radius", new double(target.radius));
   tree->Branch ("physics", new std::string(physicsList));
   tree->Branch ("nof_events", new int(atoi(nEvents.c_str())));
+  tree->Branch ("bertini_angular_as_11_2", new bool(G4HadronicParameters::Instance()->IsBertiniAngularEmissionsAs11_2()));
+  tree->Branch ("bertini_nuclei_as_11_2", new bool(G4HadronicParameters::Instance()->IsBertiniNucleiModelAs11_2()));
   tree->Fill();
   return tree;
 }
